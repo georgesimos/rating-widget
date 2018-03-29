@@ -33,6 +33,7 @@ class Reviews extends Component {
         filterReviewNum: 5,
         displayReviews: true,
         displayQuestions: false
+        
     };
 
     
