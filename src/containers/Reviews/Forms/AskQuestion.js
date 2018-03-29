@@ -228,7 +228,7 @@ class AskQuestion extends Component {
                             <div className="zevioo-form-group__flex_end">
                                 <div className="zevioo-half__flex_end">
                                     <label className="zevioo-label-big">
-                                    Όνομα & αρχικό επιθέτου
+                                    Όνομα & αρχικό του επιθέτου σας
                                     </label>
                                     <Input 
                                     elementType={this.state.questionForm.firstName.elementType}
