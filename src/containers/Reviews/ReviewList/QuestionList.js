@@ -173,7 +173,7 @@ render(){
         <div className="zevioo-product-review">
             <div className="zevioo-action-filter">
                 <div className="zevioo-filter__review">
-                    <span className="zevioo-reviews__btn" onClick={this.props.displayReviewsClick}>Αξιολογήσεις ({this.props.reviewsHeader.RC})</span>
+                    <span className="zevioo-reviews__btn" onClick={this.props.displayReviewsClick}>Αξιολογήσεις ({this.props.reviewCount})</span>
                     <span className="zevioo-questions__btn-active" onClick={this.props.displayQuestionsClick}>Ερωτήσεις ({questions.length})</span>
                 </div>
                 <div className="zevioo-filter__dropdown">

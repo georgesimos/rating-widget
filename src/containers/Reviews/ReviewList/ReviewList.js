@@ -17,7 +17,7 @@ class ReviewList extends Component {
             showReviews:2,
             loadReviews: 2, //click
             showLoadMore: true,
-            sortValue: 'new'
+            sortValue: 'default'
         };
 
       pageHandleClick(e) {
@@ -101,13 +101,22 @@ render(){
             sortedReviews = (a,b) => a.RT - b.RT
         }
 
+
         // Filter Reviews
         const filterNum = this.props.filterNum;
         const isFilter = this.props.isFilter;
         let filteredReviews = null;
-        if (isFilter) {
+        if (isFilter && sortedValue !== 'default') {
             filteredReviews = this.props.reviews.filter(filterReview(filterNum)).sort(sortedReviews);
-        }else {
+        }
+        else if (isFilter && sortedValue === 'default') {
+            filteredReviews = this.props.reviews.filter(filterReview(filterNum));
+        }
+        else if (sortedValue === 'default') {
+            filteredReviews = this.props.reviews
+            console.log(filteredReviews)  
+        }
+        else {
             filteredReviews = this.props.reviews.sort(sortedReviews)
         }
 
@@ -155,17 +164,17 @@ render(){
             }
         }
 
-        // if we dont have questions
+        // if we dont have review
         const firstReview = (
             <div className="zevioo-review__first">
-                <div className="zevioo-review__first__title">Γράψτε εσεις την πρώτη ερώτηση</div>
+                <div className="zevioo-review__first__title">Γράψτε εσεις την πρώτη αξιολόγηση</div>
                 <div className="zevioo-review__first__btn">
-                <div className="zevioo-button zevioo-ask" style={this.props.questionBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickQuestion}>
-                    <span className="zevioo-button-icon">
-                        <img src='https://zevioo.com/widgets/media/comment.svg'  className="zevioo-icons" alt="zevioo Comment" height="20px"/>
-                    </span>
-                    <span className="zevioo-button-text"> Ερώτηση </span>
-                </div>
+                <div className="zevioo-button zevioo-make-review" style={this.props.reviewBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickReview}>
+                <span className="zevioo-button-icon">
+                    <img src='https://zevioo.com/widgets/media/star.svg'  className="zevioo-icons" alt="zevioo Review" height="20px"/>
+                </span>
+                <span className="zevioo-button-text"> Αξιολογήστε το </span>
+            </div>
                 </div>
             </div>
         )
@@ -233,25 +242,21 @@ render(){
              </div>
             )
         })
-
         const exportReviewComponent = (
 
             <div className="zevioo-product-review">
                 <div className="zevioo-action-filter">
                     <div className="zevioo-filter__review">
-                        <span className="zevioo-reviews__btn-active" onClick={this.props.displayReviewsClick}>Αξιολογήσεις ({this.props.reviewsHeader.RC})</span>
+                        <span className="zevioo-reviews__btn-active" onClick={this.props.displayReviewsClick}>Αξιολογήσεις ({this.props.reviewCount})</span>
                         {this.props.showQuestionsTab ? <span className="zevioo-questions__btn" onClick={this.props.displayQuestionsClick}>Ερωτήσεις ({this.props.questionCount})</span> : ''}
                     </div>
-                    <div className="zevioo-filter__dropdown">
+                    <div className="zevioo-filter__dropdown" style={this.props.reviewCount === 0 ? {display: 'none'} : {display: 'block'}} >
                         <label className="zevioo-dropdown__label">
                         Ταξινόμηση:
                         </label>
                         <select className="zevioo-select__first" value={this.state.value} onChange={(e) => handleChange(e)}>
-                            <option value="new">Πιό πρόσφατη</option>
-                            <option value="older">Πιό παλία</option>
-                            <option value="text">Με τίτλο</option>
-                            <option value="better">Καλύτερη</option>
-                            <option value="worst">Χειρότερη</option>
+                            <option value="default">Πιο χρήσιμη</option>    
+                            <option value="new">Πιο πρόσφατη</option>
                         </select>
                     </div>
                 </div>

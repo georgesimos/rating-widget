@@ -5,13 +5,13 @@ import Aux from '../../hoc/Aux';
 
 
 import ReviewsHeader from './ReviewsHeader';
+import ReviewsHeaderNone from './ReviewsHeaderNone';
 import ReviewList from '../Reviews/ReviewList/ReviewList';
 import QuestionList from '../Reviews/ReviewList/QuestionList';
 import WriteReview from '../Reviews/Forms/WriteReview';
 import Loading from '../../components/Loading/Loading';
 import AskQuestion from '../Reviews/Forms/AskQuestion';
 
-import ProductReviewActions from '../Reviews/Header/ProductReviewActions';
 
 
 
@@ -46,21 +46,23 @@ class Reviews extends Component {
         axios.post('/getreviews', {
             USR: USR,
             PSW: PSW,
-            EAN: EAN
+            EAN: EAN,
+            ST: 0
         })
              .then(response => {
                const obj = response.data;
                const reviews = obj.RL;
+               console.log(response)
                const questions = obj.QL;
                const updatedQuestions = [...questions]
                const updatedReviews = [...reviews]
                const updatedObj = {...obj}
 
 
-               if(obj.RL.length > 0 ){ //Check if we have a list of reviews
+               if(obj.RL.length){ //Check if we have a list of reviews
                 this.setState({
                  reviews: updatedReviews,
-                 QE: true,
+                 QE: updatedObj.QE,
                  headerStats: {
                      OR: updatedObj.OR,
                      RC: reviews.length,
@@ -86,7 +88,9 @@ class Reviews extends Component {
                } else {
                    this.setState({
                     loading: false,
-                    haveReviews: false
+                    haveReviews: false,
+                    reviews: updatedReviews,
+                    QE: updatedObj.QE
                    })
                }
              })
@@ -119,9 +123,7 @@ class Reviews extends Component {
 
             filterHandlerClick( e ) {
                 e.preventDefault();
-                let filterVal = e.target.closest('.zevioo-clickable').getAttribute('data-star')
-
-                
+                let filterVal = e.target.closest('.zevioo-clickable').getAttribute('data-star')      
                 this.setState({
                     filterReview: true,
                     filterReviewNum: parseInt(filterVal, 10)
@@ -146,6 +148,8 @@ class Reviews extends Component {
     
                         })
                     }
+
+
 
     render() {
         let JsonLd = {
@@ -181,9 +185,8 @@ class Reviews extends Component {
                   })
             
         }
-        let toRender = null;
         if (this.state.loading) {
-            toRender = <Loading />;
+           return <Loading /> ;
         } else {
             if(this.state.haveReviews === false){
                 return (
@@ -193,18 +196,41 @@ class Reviews extends Component {
                         <span className="zevioo-title">από το</span> 
                         <img src='https://zevioo.com/widgets/media/Logo.svg' className="zevioo-logo" alt="zevioo logo" height="16px"/>
                         </h3>
-                        <div className="zevioo-no__reviews">
-                            <span className="zevioo-no__title">
-                            {"δεν υπάρχουν διαθέσιμες αξιολογήσεις γι'αυτο το προϊόν"}
-                            </span>
-                            <div className="zevioo-no__actions">
-                            <ProductReviewActions 
-                            clickReview={( e )=> this.writeReviewHandler(e)}
-                            clickQuestion={( e )=> this.askQuestionsHandler(e)}/>
-                            </div>
-                        </div>
-                        {this.state.writeReview? <WriteReview click={( e )=> this.writeReviewHandler(e)}/> : null }
-                        {this.state.askQuestions? <AskQuestion click={( e )=> this.askQuestionsHandler(e)}/> : null }
+                        <ReviewsHeaderNone 
+                        headerStats={this.state.headerStats} 
+                            writeReviewClick={( e )=> this.writeReviewHandler(e)}
+                            askQuestionClick={( e )=> this.askQuestionsHandler(e)}
+                            filterClick={( e )=> this.filterHandlerClick(e)}
+                            reviewBtn={this.state.writeReview}
+                            questionBtn={this.state.askQuestions}
+                            showQuestionsTab = {this.state.QE}
+                            />
+
+                            {this.state.writeReview? <WriteReview click={( e )=> this.writeReviewHandler(e)}/> : null }
+                            {this.state.askQuestions? <AskQuestion click={( e )=> this.askQuestionsHandler(e)}/> : null }
+                            {this.state.displayReviews ?
+                                <ReviewList 
+                                    reviews={this.state.reviews}
+                                    reviewCount={this.state.reviews.length}
+                                    questionCount={this.state.questions.length}
+                                    isFilter={this.state.filterReview}
+                                    filterNum={this.state.filterReviewNum}
+                                    displayReviewsClick={( e )=> this.displayReviewsHandler(e)}
+                                    displayQuestionsClick={( e )=> this.displayQuestionsHandler(e)}
+                                    showQuestionsTab = {this.state.QE}
+                                    clickReview={( e )=> this.writeReviewHandler(e)}
+                                    reviewBtn={this.state.writeReview}
+                                /> : null }
+                            
+                            {this.state.displayQuestions && this.state.QE ? 
+                                <QuestionList 
+                                    reviewCount={this.state.reviews.length}
+                                    questions={this.state.questions}
+                                    displayReviewsClick={( e )=> this.displayReviewsHandler(e)}
+                                    displayQuestionsClick={( e )=> this.displayQuestionsHandler(e)}
+                                    clickQuestion={( e )=> this.askQuestionsHandler(e)}
+                                    questionBtn={this.state.askQuestions}
+                                />: null }
 
                     </Aux>
                 )
@@ -235,8 +261,8 @@ class Reviews extends Component {
 
                 {this.state.displayReviews ?
                     <ReviewList 
-                        reviewsHeader={this.state.headerStats}
                         reviews={this.state.reviews}
+                        reviewCount={this.state.reviews.length}
                         questionCount={this.state.questions.length}
                         isFilter={this.state.filterReview}
                         filterNum={this.state.filterReviewNum}
@@ -247,7 +273,8 @@ class Reviews extends Component {
                 
                 {this.state.displayQuestions && this.state.QE ? 
                     <QuestionList 
-                        reviewsHeader={this.state.headerStats}
+                        reviewCount={this.state.reviews.length}
+                        questionCount={this.state.questions.length}
                         questions={this.state.questions}
                         displayReviewsClick={( e )=> this.displayReviewsHandler(e)}
                         displayQuestionsClick={( e )=> this.displayQuestionsHandler(e)}
@@ -257,11 +284,6 @@ class Reviews extends Component {
                 </Aux>
             )
         }
-        return (
-            <Aux>
-                {toRender}
-            </Aux>
-        );
     }
 }
 

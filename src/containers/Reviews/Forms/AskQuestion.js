@@ -196,10 +196,10 @@ class AskQuestion extends Component {
             return (
                 <div className="zevioo-form__success">
                     <div className="zevioo-close-icons" onClick={this.props.click}><img src='https://zevioo.com/widgets/media/close.svg'  className="zevioo-close-svg" alt="zevioo Close" height="30px"/></div>
-                    <div className="zevioo-success-title">Thank you!</div>
+                    <div className="zevioo-success-title">Ευχαριστούμε!</div>
                     <div className="zevioo-success-subTitle">
-                        We’ve just sent you an email. Please confirm your email account by
-                        clicking on the confirmation link and your Question will be published.
+                    Σας έχουμε στείλει ένα email. Επιβεβαιώστε τον λογαριασμό σας
+                    κάνοντας κλικ στο σύνδεσμο επιβεβαίωσης και η απάντησή σας θα δημοσιευθεί.
                     </div>
                 </div>
             )

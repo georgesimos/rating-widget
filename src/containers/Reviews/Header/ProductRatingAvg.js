@@ -6,7 +6,7 @@ const productRatingAvg = (props) => {
         
         <div className="zevioo-rating__avg">
             <div className="zevioo-avg-text">{props.OR ? props.OR.toFixed(1) : 0 }<span> από 5 </span> </div>
-            <div className="zevioo-counter__text"><span>{props.RC}</span> αξιολογήσεις</div>
+            {props.RC ? <div className="zevioo-counter__text"><span>{props.RC}</span> αξιολογήσεις</div> : null}
         </div>
     )
 }
