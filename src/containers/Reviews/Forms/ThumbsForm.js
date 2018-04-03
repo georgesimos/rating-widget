@@ -20,8 +20,14 @@ class ThumbsForm extends Component {
             LT: 0
         }
     }
-
-
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.likeCount !== this.props.likeCount || nextProps.dislikeCount !== this.props.dislikeCount ) {
+          this.setState({
+              likeCounter: nextProps.likeCount,
+              dislikeCounter: nextProps.dislikeCount
+        });
+        }
+      }
 
     modalHandler = () => {
         this.setState({showModal: true});
@@ -106,6 +112,8 @@ class ThumbsForm extends Component {
             </div>
         </form>
         )
+
+        
         return (
             <Aux>
             <Backdrop show={this.state.showModal} clicked={(e) => this.modalCancelHandler(e)} />

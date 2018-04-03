@@ -721,7 +721,6 @@ span.zevioo-review-title {
 }
 .zevioo-question-reply {
   display: inline-block;
-  width: 70%;
   margin-left: 10px;
   font-weight: 100;
   color: hsl(0, 0%, 40%);

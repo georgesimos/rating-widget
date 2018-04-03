@@ -114,7 +114,6 @@ render(){
         }
         else if (sortedValue === 'default') {
             filteredReviews = this.props.reviews
-            console.log(filteredReviews)  
         }
         else {
             filteredReviews = this.props.reviews.sort(sortedReviews)

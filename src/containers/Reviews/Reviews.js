@@ -52,7 +52,6 @@ class Reviews extends Component {
              .then(response => {
                const obj = response.data;
                const reviews = obj.RL;
-               console.log(response)
                const questions = obj.QL;
                const updatedQuestions = [...questions]
                const updatedReviews = [...reviews]
