@@ -61,7 +61,7 @@ class Reviews extends Component {
                if(obj.RL.length){ //Check if we have a list of reviews
                 this.setState({
                  reviews: updatedReviews,
-                 QE: updatedObj.QE,
+                 QE: false, //updatedObj.QE
                  headerStats: {
                      OR: updatedObj.OR,
                      RC: reviews.length,
@@ -89,7 +89,7 @@ class Reviews extends Component {
                     loading: false,
                     haveReviews: false,
                     reviews: updatedReviews,
-                    QE: updatedObj.QE
+                    QE: false //updatedObj.QE
                    })
                }
              })
