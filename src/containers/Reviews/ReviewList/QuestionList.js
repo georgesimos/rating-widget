@@ -156,9 +156,9 @@ render(){
         // if we dont have questions
         const firstQuestion = (
             <div className="zevioo-question__first">
-                <div className="zevioo-question__first__title">Γράψτε εσεις την πρώτη ερώτηση</div>
+                <div className="zevioo-question__first__title">Γράψτε εσείς την πρώτη ερώτηση</div>
                 <div className="zevioo-question__first__btn">
-                <div className="zevioo-button zevioo-ask" style={this.props.questionBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickQuestion}>
+                <div className="zevioo-button zevioo-ask zevioo-none" style={this.props.questionBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickQuestion}>
                     <span className="zevioo-button-icon">
                         <img src='https://zevioo.com/widgets/media/comment.svg'  className="zevioo-icons" alt="zevioo Comment" height="20px"/>
                     </span>
@@ -176,7 +176,7 @@ render(){
                     <span className="zevioo-reviews__btn" onClick={this.props.displayReviewsClick}>Αξιολογήσεις ({this.props.reviewCount})</span>
                     <span className="zevioo-questions__btn-active" onClick={this.props.displayQuestionsClick}>Ερωτήσεις ({questions.length})</span>
                 </div>
-                <div className="zevioo-filter__dropdown">
+                <div className="zevioo-filter__dropdown" style={questions.length === 0 ? {display: 'none'} : {display: 'block'}}>
                     <label className="zevioo-dropdown__label">
                     Ταξινόμηση:
                     </label>
@@ -187,7 +187,7 @@ render(){
                 </div>
             </div>
             <div className="zevioo-questions-list">
-            {questions.length ? exportQuestions: firstQuestion }
+            {questions.length ? exportQuestions : firstQuestion }
             </div>
             <div className="zevioo-paggination">
                 <div id="zevioo-pager">
@@ -196,7 +196,6 @@ render(){
             </div>
         </div>
     );
-
 return (
         <Aux>
         {exportQuestionsComponent}

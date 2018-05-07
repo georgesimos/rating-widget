@@ -1582,6 +1582,10 @@ cursor: pointer;
   right: 20%;
   cursor: pointer;
 }
+.zevioo-close-icons.quest{
+  right: 10px;
+  top: 5px;
+}
 .zevioo-close-icon {
   position: absolute;
   right: 5%;

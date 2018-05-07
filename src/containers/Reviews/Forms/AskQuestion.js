@@ -25,32 +25,15 @@ class AskQuestion extends Component {
                 },
                 valid: true
             },
-            firstName: {
+            nickName: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    id: 'user_firstname',
+                    id: 'user_nickname',
                     className: 'zevioo-form-input user-name',
                     required: true,
-                    name: 'user_firstname',
-                    placeholder: 'Γιάννης'
-                },
-                value: '',
-                validation: {
-                    required: false
-                },
-                valid: true
-            },
-            lastName: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    id: 'user_lastname',
-                    required: true,
-                    className: 'zevioo-form-input user-name',
-                    name: 'user_lastname',
-                    placeholder: 'Μ',
-                    maxLength: '1',
+                    name: 'user_nickname',
+                    placeholder: 'πχ. Γιάννης Π'
                 },
                 value: '',
                 validation: {
@@ -94,7 +77,8 @@ class AskQuestion extends Component {
         formIsValid: false,
         loading: false,
         showSuccess: false,
-        showUserInfo: false
+        showUserInfo: false,
+        isValidAge: false
     }
     askHandler = ( event ) => {
         event.preventDefault();
@@ -114,25 +98,29 @@ class AskQuestion extends Component {
             USR: USR,
             PSW: PSW,
             EML: questionForm.email.value,
-            FN: questionForm.firstName.value,
-            LN: questionForm.lastName.value,
+            NN: questionForm.nickName.value,
             AG: questionForm.age.value,
             EAN: EAN,
             QT: questionForm.question.value,
             TM:true
 
         })
-        axios.post( '/postquestion', newQuestion )
-        .then( response => {
-            console.log(response);
-            this.setState( { loading: false, showSuccess: true } );
-            this.setState(this.state);
-            
+        if (questionForm.age.value >= 16) {
+            this.setState( { isValidAge: true } );
+            axios.post( '/postquestion', newQuestion )
+            .then( response => {
+                this.setState( { loading: false, showSuccess: true } );
+                this.setState(this.state);
+                
+    
+            } )
+            .catch( error => {
+                this.setState( { loading: false } );
+            } );
+         } else {
+            this.setState( { isValidAge: false, loading: false, showSuccess: true } );
+         }
 
-        } )
-        .catch( error => {
-            this.setState( { loading: false } );
-        } );
     }
 
 
@@ -192,6 +180,18 @@ class AskQuestion extends Component {
         if (this.state.loading) {
            return <Loading />
         }
+        if (!this.state.isValidAge && this.state.showSuccess) {
+            return (
+                <div className="zevioo-form__success">
+                    <div className="zevioo-close-icons" onClick={this.props.click}><img src='https://zevioo.com/widgets/media/close.svg' className="zevioo-close-svg" alt="zevioo Close" height="30px"/></div>
+                    <div className="zevioo-success-title">Μας συγχωρείτε,</div>
+                    <div className="zevioo-success-subTitle">
+                    αλλά προκειμένου να διαφυλάξουμε τα προσωπικά σας δεδομένα, δεν δεχόμαστε αξιολογήσεις ή ερωτήσεις από άτομα κάτω των 16 ετών.
+                    </div>
+                </div>
+            )
+        }
+
         if (this.state.showSuccess) {
             return (
                 <div className="zevioo-form__success">
@@ -207,6 +207,7 @@ class AskQuestion extends Component {
         return (
             <div className="zevioo-write-review-wrapper">
                 <div className="zevioo-write-review-box">
+                <div className="zevioo-close-icons quest" onClick={this.props.click}><img src='https://zevioo.com/widgets/media/close.svg'  className="zevioo-close-svg" alt="zevioo Close" height="30px"/></div>
                 <form id="zevioo-question-form" onSubmit={this.askHandler}>
                     <div className="zevioo-write-review-body">
                         <div className="zevioo-form">
@@ -228,20 +229,13 @@ class AskQuestion extends Component {
                             <div className="zevioo-form-group__flex_end">
                                 <div className="zevioo-half__flex_end">
                                     <label className="zevioo-label-big">
-                                    Όνομα & αρχικό του επιθέτου σας
+                                    Ψευδώνυμο
                                     </label>
                                     <Input 
-                                    elementType={this.state.questionForm.firstName.elementType}
-                                    elementConfig={this.state.questionForm.firstName.elementConfig}
-                                    value={this.state.questionForm.firstName.value}
-                                    changed={(event) => this.inputChangedHandler(event, 'firstName')} />
-                                </div>
-                                <div className="zevioo-half__flex_end">
-                                    <Input 
-                                    elementType={this.state.questionForm.lastName.elementType}
-                                    elementConfig={this.state.questionForm.lastName.elementConfig}
-                                    value={this.state.questionForm.lastName.value}
-                                    changed={(event) => this.inputChangedHandler(event, 'lastName')} />
+                                    elementType={this.state.questionForm.nickName.elementType}
+                                    elementConfig={this.state.questionForm.nickName.elementConfig}
+                                    value={this.state.questionForm.nickName.value}
+                                    changed={(event) => this.inputChangedHandler(event, 'nickName')} />
                                 </div>
                                 <div className="zevioo-half__flex_end">
                                     <label className="zevioo-label-big">

@@ -166,9 +166,9 @@ render(){
         // if we dont have review
         const firstReview = (
             <div className="zevioo-review__first">
-                <div className="zevioo-review__first__title">Γράψτε εσεις την πρώτη αξιολόγηση</div>
+                <div className="zevioo-review__first__title">Γράψτε εσείς την πρώτη αξιολόγηση</div>
                 <div className="zevioo-review__first__btn">
-                <div className="zevioo-button zevioo-make-review" style={this.props.reviewBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickReview}>
+                <div className="zevioo-button zevioo-make-review zevioo-none" style={this.props.reviewBtn?{backgroundColor: "var(--zeviooColor)"}: null} onClick={this.props.clickReview}>
                 <span className="zevioo-button-icon">
                     <img src='https://zevioo.com/widgets/media/star.svg'  className="zevioo-icons" alt="zevioo Review" height="20px"/>
                 </span>

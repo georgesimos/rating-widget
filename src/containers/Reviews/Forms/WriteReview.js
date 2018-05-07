@@ -132,32 +132,15 @@ class WriteReview extends Component {
                 },
                 valid: true
             },
-            firstName: {
+            nickName: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    id: 'user_firstname',
+                    id: 'user_nickname',
                     className: 'zevioo-form-input user-name',
-                    name: 'user_firstname',
+                    name: 'user_nickname',
                     required: true,
-                    placeholder: 'πχ. Γιάννης'
-                },
-                value: '',
-                validation: {
-                    required: false
-                },
-                valid: true
-            },
-            lastName: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    id: 'user_lastname',
-                    className: 'zevioo-form-input user-name',
-                    name: 'user_lastname',
-                    placeholder: 'Μ',
-                    required: true,
-                    maxLength: '1',
+                    placeholder: 'πχ. Γιάννης Π'
                 },
                 value: '',
                 validation: {
@@ -202,7 +185,8 @@ class WriteReview extends Component {
         loading: false,
         showSuccess: false,
         showUserInfo: false,
-        termsChecked: true
+        termsChecked: true,
+        isValidAge: false
     }
     orderHandler = ( event ) => {
         event.preventDefault();
@@ -225,21 +209,13 @@ class WriteReview extends Component {
             let val = date + " " + time ;
             return val;
         };
-        // const userAge = (input) => {
-        //     const year = new Date().getFullYear();
-        //     const BirthYear = input;
-        //     let val = '';
-        //     (BirthYear.length > 1) ? val = year - BirthYear : val = "";
-        //     return val;  
-        // }
         const thisDate = zeviooDate();
         const newReview = JSON.stringify({
             USR: USR,
             PSW: PSW,
             EAN: EAN,
             EML: reviewForm.email.value,
-            FN: reviewForm.firstName.value,
-            LN: reviewForm.lastName.value,
+            NN: reviewForm.nickName.value,
             GD: '',
             AG: reviewForm.age.value,
             DT: thisDate,
@@ -259,16 +235,22 @@ class WriteReview extends Component {
 
         })
 
-        axios.post( '/savereview', newReview )
-        .then( response => {
+        if (reviewForm.age.value >= 16) {
+            this.setState( { isValidAge: true } );
+            axios.post( '/savereview', newReview )
+            .then( response => {
+    
+                this.setState( { loading: false, showSuccess: true  } );
+                this.setState(this.state);
+    
+            } )
+            .catch( error => {
+                this.setState( { loading: false } );
+            } );
+        } else {
+            this.setState( { isValidAge: false, loading: false, showSuccess: true } );
+        }
 
-            this.setState( { loading: false, showSuccess: true  } );
-            this.setState(this.state);
-
-        } )
-        .catch( error => {
-            this.setState( { loading: false } );
-        } );
     }
     componentDidMount(){
         userStarRating();
@@ -341,6 +323,18 @@ class WriteReview extends Component {
         if (this.state.loading) {
             return <Loading />
          }
+         if (!this.state.isValidAge && this.state.showSuccess) {
+            return (
+                <div className="zevioo-form__success">
+                    <div className="zevioo-close-icons" onClick={this.props.click}><img src='https://zevioo.com/widgets/media/close.svg' className="zevioo-close-svg" alt="zevioo Close" height="30px"/></div>
+                    <div className="zevioo-success-title">Μας συγχωρείτε,</div>
+                    <div className="zevioo-success-subTitle">
+                    αλλά προκειμένου να διαφυλάξουμε τα προσωπικά σας δεδομένα, δεν δεχόμαστε αξιολογήσεις ή ερωτήσεις από άτομα κάτω των 16 ετών.
+                    </div>
+                </div>
+            )
+        }
+
         if (this.state.showSuccess) {
             return (
                 <div className="zevioo-form__success">
@@ -439,20 +433,13 @@ class WriteReview extends Component {
                     <div className="zevioo-form-group__flex_end">
                         <div className="zevioo-half__flex_end">
                             <span className="zevioo-label-big">
-                            Όνομα & αρχικό επιθέτου
+                            Ψευδώνυμο
                             </span>
                             <Input 
-                            elementType={this.state.reviewForm.firstName.elementType}
-                            elementConfig={this.state.reviewForm.firstName.elementConfig}
-                            value={this.state.reviewForm.firstName.value}
-                            changed={(event) => this.inputChangedHandler(event, 'firstName')} />
-                        </div>
-                        <div className="zevioo-half__flex_end">
-                            <Input 
-                            elementType={this.state.reviewForm.lastName.elementType}
-                            elementConfig={this.state.reviewForm.lastName.elementConfig}
-                            value={this.state.reviewForm.lastName.value}
-                            changed={(event) => this.inputChangedHandler(event, 'lastName')} />
+                            elementType={this.state.reviewForm.nickName.elementType}
+                            elementConfig={this.state.reviewForm.nickName.elementConfig}
+                            value={this.state.reviewForm.nickName.value}
+                            changed={(event) => this.inputChangedHandler(event, 'nickName')} />
                         </div>
                         <div className="zevioo-half__flex_end">
                             <span className="zevioo-label-big">
@@ -486,7 +473,7 @@ class WriteReview extends Component {
                         required
                         checked={this.state.isGoing}
                     onChange={(e) => this.termsHandleInputChange(e)} />
-                    <a href="https://www.zevioo.com/user-terms.html" target="_blank" rel="noopener noreferrer" className="zevioo-submit__terms-text">Αποδέχομαι την Πολιτική Απορρήτου Zevioo</a>
+                    <a href="https://www.zevioo.com/terms.aspx" target="_blank" rel="noopener noreferrer" className="zevioo-submit__terms-text">Αποδέχομαι την Πολιτική Απορρήτου Zevioo</a>
                     </div>
                     <div className="zevioo-submit__button">
                     <button type="submit" className="zevioo-button zevioo-color__btn" form="zevioo-review-form" value="Submit">Δημοσιοποίηση</button>

@@ -23,6 +23,7 @@ const zeviooRating = document.querySelectorAll('.zevioo-rating')
 const zeviooReviews = document.getElementById('zevioo-reviews')
 const zeviooBanner = document.getElementById('zevioo-banner')
 
+
 if(zeviooRating) {
     // zeviooRating.forEach(function (element, index) {
     //     ReactDOM.render(<Stars key={index} ean={element.getAttribute('data-ean')} />, element);

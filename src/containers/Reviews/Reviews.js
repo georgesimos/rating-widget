@@ -56,9 +56,9 @@ class Reviews extends Component {
                const updatedQuestions = [...questions]
                const updatedReviews = [...reviews]
                const updatedObj = {...obj}
-                console.log(obj)
 
-               if(obj.RL.length){ //Check if we have a list of reviews
+
+               if (obj.RL.length){ //Check if we have a list of reviews
                 this.setState({
                  reviews: updatedReviews,
                  QE: updatedObj.QE, //updatedObj.QE
@@ -89,6 +89,7 @@ class Reviews extends Component {
                     loading: false,
                     haveReviews: false,
                     reviews: updatedReviews,
+                    questions: updatedQuestions,
                     QE: updatedObj.QE //updatedObj.QE
                    })
                }
