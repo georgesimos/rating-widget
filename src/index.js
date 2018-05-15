@@ -23,6 +23,45 @@ const zeviooRating = document.querySelectorAll('.zevioo-rating')
 const zeviooReviews = document.getElementById('zevioo-reviews')
 const zeviooBanner = document.getElementById('zevioo-banner')
 
+// Append eShopColor
+if(zeviooReviews) {
+
+let eshopColor = zeviooReviews.getAttribute('data-color');
+if( eshopColor === null ) {
+    eshopColor = 'rgb(255, 13, 97)';
+}
+
+var css = `
+:root {
+    --zeviooColor: ${eshopColor} !important;
+}
+
+.zevioo-filter__review {
+    color: ${eshopColor} !important;
+}
+.zevioo-questions__btn-active, .zevioo-reviews__btn-active {
+    border-color: ${eshopColor} !important;
+}
+
+.quality-choosen svg, .star-choosen svg, .value-choosen svg {
+    fill: ${eshopColor} !important;
+    stroke: ${eshopColor} !important;
+}
+`,
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+style.type = 'text/css';
+if (style.styleSheet){
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
+head.appendChild(style);
+
+}
+
 
 if(zeviooRating) {
     // zeviooRating.forEach(function (element, index) {
